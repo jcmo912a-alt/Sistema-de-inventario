@@ -10,7 +10,7 @@ public class ConexionBD { // Define la clase responsable de conectar Java con la
 
     private static final String USUARIO = "root"; // Usuario de la base de datos
 
-    private static final String CLAVE = "3212128889/js"; // Contraseña de la base de datos.
+    private static final String CLAVE = "*****************"; // Contraseña de la base de datos.
 
     public static Connection obtenerConexion() { // Método que retorna una conexión a la base de datos
 
