@@ -1,0 +1,154 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`PROVEEDOR`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`PROVEEDOR` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`PROVEEDOR` (
+  `ID_PROVEEDOR` INT NOT NULL AUTO_INCREMENT,
+  `NOMBRE` VARCHAR(100) NOT NULL,
+  `TELEFONO` VARCHAR(20) NULL,
+  `CONTACTO` VARCHAR(100) NULL,
+  `DIRECCION` VARCHAR(150) NULL,
+  `ESTADO` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`ID_PROVEEDOR`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`CATEGORIA`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`CATEGORIA` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`CATEGORIA` (
+  `ID_CATEGORIA` INT NOT NULL AUTO_INCREMENT,
+  `NOMBRE` VARCHAR(100) NOT NULL,
+  `DESCRIPCION` VARCHAR(200) NULL,
+  PRIMARY KEY (`ID_CATEGORIA`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`PRODUCTO`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`PRODUCTO` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`PRODUCTO` (
+  `ID_PRODUCTO` INT NOT NULL AUTO_INCREMENT,
+  `NOMBRE` VARCHAR(100) NOT NULL,
+  `ID_CATEGORIA` INT NULL,
+  `ID_PROVEEDOR` INT NULL,
+  `STOCK` INT NOT NULL,
+  `DESCRIPCION` VARCHAR(200) NULL,
+  `PRECIO` DECIMAL(10,2) NULL,
+  PRIMARY KEY (`ID_PRODUCTO`),
+  INDEX `FK_ID_PROVEEDOR_idx` (`ID_PROVEEDOR` ASC) VISIBLE,
+  INDEX `FK_ID_CATEGORIA_idx` (`ID_CATEGORIA` ASC) VISIBLE,
+  CONSTRAINT `FK_ID_PROVEEDOR`
+    FOREIGN KEY (`ID_PROVEEDOR`)
+    REFERENCES `mydb`.`PROVEEDOR` (`ID_PROVEEDOR`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `FK_ID_CATEGORIA`
+    FOREIGN KEY (`ID_CATEGORIA`)
+    REFERENCES `mydb`.`CATEGORIA` (`ID_CATEGORIA`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`USUARIOS`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`USUARIOS` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`USUARIOS` (
+  `ID_USUARIOS` INT NOT NULL AUTO_INCREMENT,
+  `NOMBRE` VARCHAR(100) NOT NULL,
+  `CORREO` VARCHAR(150) NOT NULL,
+  `CONTRASEÑA` VARCHAR(260) NOT NULL,
+  UNIQUE INDEX `CORREO_UNIQUE` (`CORREO` ASC) VISIBLE,
+  PRIMARY KEY (`ID_USUARIOS`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`MOVIMIENTO`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`MOVIMIENTO` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`MOVIMIENTO` (
+  `ID_MOVIMIENTO` INT NOT NULL AUTO_INCREMENT,
+  `ID_PRODUCTO` INT NULL,
+  `TIPO DE MOVIMIENTO` VARCHAR(20) NULL,
+  `CAANTIDAD` INT NULL,
+  `FECHA` DATE NULL,
+  `ID_USUARIOS` INT NULL,
+  PRIMARY KEY (`ID_MOVIMIENTO`),
+  INDEX `FK_ID_PRODUCTO_idx` (`ID_PRODUCTO` ASC) VISIBLE,
+  INDEX `FK_ID_USUARIO_idx` (`ID_USUARIOS` ASC) VISIBLE,
+  CONSTRAINT `FK_ID_PRODUCTO`
+    FOREIGN KEY (`ID_PRODUCTO`)
+    REFERENCES `mydb`.`PRODUCTO` (`ID_PRODUCTO`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `FK_ID_USUARIO`
+    FOREIGN KEY (`ID_USUARIOS`)
+    REFERENCES `mydb`.`USUARIOS` (`ID_USUARIOS`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`INVENTARIO`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`INVENTARIO` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`INVENTARIO` (
+  `ID_INVENTARIO` INT NOT NULL AUTO_INCREMENT,
+  `ID_PRODUCTO` INT NULL,
+  `CANTIDAD_ACTUAL` INT NULL,
+  `FECHA_ACTUALIZACION` DATETIME NOT NULL,
+  PRIMARY KEY (`ID_INVENTARIO`),
+  UNIQUE INDEX `ID_PRODUCTO_UNIQUE` (`ID_PRODUCTO` ASC) VISIBLE,
+  CONSTRAINT `FKI_D_PRODUCTO`
+    FOREIGN KEY (`ID_PRODUCTO`)
+    REFERENCES `mydb`.`PRODUCTO` (`ID_PRODUCTO`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+USE `mydb` ;
+
+-- -----------------------------------------------------
+--  routine1
+-- -----------------------------------------------------
+
+USE `mydb`;
+DROP PROCEDURE IF EXISTS `mydb`.`routine1`;
+
+DELIMITER $$
+USE `mydb`$$
+$$
+
+DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
