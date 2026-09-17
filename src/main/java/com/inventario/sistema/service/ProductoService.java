@@ -18,10 +18,12 @@ public class ProductoService {
         this.productoRepository = productoRepository;
     }
 
+    // listar todos los productos
     public List<Producto> listarTodos() {
         return productoRepository.findAll();
     }
 
+    // buscar un producto por id; si no se encuentra, lanza una excepción
     public Producto buscarPorId(Integer id) {
         return productoRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(

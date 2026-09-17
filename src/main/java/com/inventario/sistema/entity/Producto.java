@@ -25,6 +25,7 @@ public class Producto {
     @Column(name = "DESCRIPCION", length = 200)
     private String descripcion;
 
+    @NotNull(message = "El precio es un campo obligatorio")
     @Positive(message = "El precio debe ser mayor que cero")
     @Column(name = "PRECIO")
     private BigDecimal precio;

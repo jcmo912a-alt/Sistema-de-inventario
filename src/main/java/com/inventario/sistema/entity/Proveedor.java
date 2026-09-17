@@ -3,6 +3,8 @@ package com.inventario.sistema.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.SQLDelete;
@@ -23,12 +25,15 @@ public class Proveedor {
     @Size(max = 100, message = "El nombre no puede superar 100 caracteres")
     @Column(name = "NOMBRE", nullable = false, length = 100)
     private String nombre;
-
+    @NotBlank(message = "El Numero de telefono es obligatorio")
+    @Pattern(regexp = "^\\+?[1-9]\\d{7,10}$", message = "El número de teléfono no es válido")
     @Size(max = 20)
     @Column(name = "TELEFONO", length = 20)
     private String telefono;
 
-    @Size(max = 100)
+    @NotBlank(message = "El contacto es obligatorio")
+    @Size(max = 100, message = "El contacto no puede superar 100 caracteres")
+    @Email(message = "El contacto debe ser un correo electrónico válido")
     @Column(name = "CONTACTO", length = 100)
     private String contacto;
 
@@ -53,8 +58,6 @@ public class Proveedor {
         this.direccion = direccion;
         this.estado = (estado != null) ? estado : true;
     }
-
-    // ---------------- Propiedad calculada para JSON ----------------
 
     /**
      * Traduce el estado booleano a texto descriptivo para la respuesta JSON.
