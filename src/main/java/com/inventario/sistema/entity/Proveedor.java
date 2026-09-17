@@ -42,7 +42,7 @@ public class Proveedor {
     private String direccion;
 
     // Evita que el campo booleano bruto se muestre en el JSON
-    @JsonIgnore
+
     @Column(name = "ESTADO", nullable = false)
     private Boolean estado = true;
 

@@ -13,6 +13,7 @@ import java.util.List;
 //Controlador REST del modulo Proveedor.
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/proveedores")
 public class ProveedorController {
 
