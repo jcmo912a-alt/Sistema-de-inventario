@@ -1,0 +1,33 @@
+.boton {
+  border: none;
+  border-radius: var(--radio);
+  padding: 9px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: filter 0.15s ease;
+}
+
+.boton:hover {
+  filter: brightness(0.94);
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.boton--primario {
+  background: var(--color-primario-suave);
+  color: #fff;
+}
+
+.boton--secundario {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+}
+
+.boton--peligro {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}

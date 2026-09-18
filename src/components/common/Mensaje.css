@@ -1,0 +1,33 @@
+.mensaje {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radio);
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+}
+
+.mensaje--error {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}
+
+.mensaje--exito {
+  background: var(--color-exito-fondo);
+  color: var(--color-exito);
+}
+
+.mensaje--info {
+  background: #eaf1fb;
+  color: var(--color-primario-suave);
+}
+
+.mensaje__cerrar {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: inherit;
+}

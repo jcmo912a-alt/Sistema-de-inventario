@@ -1,0 +1,221 @@
+/* cabecera oscura */
+thead tr,
+th {
+    background-color: #1f2937 !important;
+    color: #38bdf8 !important;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.85rem 1.25rem;
+}
+
+/* --- CABECERA DEL MÓDULO --- */
+.modulo__cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Alinea verticalmente el botón con el título */
+    margin-bottom: 1.5rem;
+}
+
+/* --- BÚSQUEDA Y FILTROS --- */
+.modulo__filtros {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+/* Unificación visual para el input de texto y el select */
+.modulo__filtros input[type="text"],
+.modulo__filtros input[type="search"],
+.filtro-select {
+    background-color: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.875rem;
+    padding: 0.6rem 1rem;
+    outline: none;
+    height: 40px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.modulo__filtros input[type="text"],
+.modulo__filtros input[type="search"] {
+    width: 100%;
+    max-width: 360px;
+}
+
+.filtro-select {
+    cursor: pointer;
+}
+
+.filtro-select option {
+    background-color: #111827;
+    color: #ffffff;
+}
+
+.modulo__filtros input:focus,
+.filtro-select:focus {
+    border-color: #38bdf8;
+}
+
+/* --- TABLA PRINCIPAL --- */
+.tabla-container {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid #1f2937;
+    background-color: #111827;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.875rem;
+    color: #ffffff !important;
+}
+
+thead tr {
+    background-color: #1f2937 !important;
+    border-bottom: 1px solid #374151;
+}
+
+th {
+    padding: 0.85rem 1.25rem;
+    color: #38bdf8 !important;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 1px solid #1f2937 !important;
+    background-color: transparent !important;
+    transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+    background-color: #1a2332 !important;
+}
+
+td {
+    padding: 0.9rem 1.25rem;
+    color: #e2e8f0 !important;
+    vertical-align: middle;
+}
+
+/* --- ETIQUETAS DE ESTADO (BADGES) --- */
+.etiqueta-estado {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.etiqueta-estado--activo {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.etiqueta-estado--inactivo {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* --- ACCIONES EN LA TABLA --- */
+.tabla__acciones {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Botón Editar (Secundario) */
+.tabla__acciones button:first-child,
+.btn-editar {
+    background-color: #1e293b !important;
+    color: #38bdf8 !important;
+    border: 1px solid #334155 !important;
+    padding: 0.35rem 0.75rem !important;
+    border-radius: 6px !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tabla__acciones button:first-child:hover,
+.btn-editar:hover {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+/* Botón Eliminar (Peligro) */
+.tabla__acciones button:last-child,
+.btn-eliminar {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    padding: 0.35rem 0.75rem !important;
+    border-radius: 6px !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tabla__acciones button:last-child:hover,
+.btn-eliminar:hover {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+/* --- FORMULARIO Y CAMPOS (REGISTRO / EDICIÓN) --- */
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    width: 100%;
+}
+
+.campo label {
+    color: #f8fafc;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.campo input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.68rem 0.85rem;
+    background-color: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.campo input:focus {
+    border-color: #38bdf8;
+}
+
+.formulario__acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
