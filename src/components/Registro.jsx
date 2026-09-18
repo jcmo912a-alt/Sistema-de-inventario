@@ -6,7 +6,7 @@ export default function Registro() {
     const [formData, setFormData] = useState({
         nombre: '',
         correo: '',
-        contraseña: ''
+        contrasena: ''
     });
     const [error, setError] = useState('');
     const [exito, setExito] = useState('');
@@ -23,7 +23,7 @@ export default function Registro() {
         setError('');
         setExito('');
 
-        if (!formData.nombre || !formData.correo || !formData.contraseña) {
+        if (!formData.nombre || !formData.correo || !formData.contrasena) {
             setError('Todos los campos son obligatorios.');
             return;
         }
@@ -93,13 +93,13 @@ export default function Registro() {
                     </div>
 
                     <div className="input-group">
-                        <label htmlFor="contraseña">Contraseña</label>
+                        <label htmlFor="contrasena">Contraseña</label>
                         <input
-                            id="contraseña"
+                            id="contrasena"
                             type="password"
-                            name="contraseña"
+                            name="contrasena"
                             placeholder="••••••••"
-                            value={formData.contraseña}
+                            value={formData.contrasena}
                             onChange={handleChange}
                             className="input-field"
                             disabled={loading}

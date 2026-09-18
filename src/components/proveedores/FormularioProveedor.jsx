@@ -6,16 +6,20 @@ function FormularioProveedor({ proveedor, onGuardar, onCancelar }) {
     telefono: '',
     contacto: '',
     direccion: '',
+    estado: 'true',
   });
 
   // Al abrir el modal, precargar los datos si estamos editando
   useEffect(() => {
     if (proveedor) {
+      const esActivo = proveedor.estado === false || proveedor.estado === 0 || proveedor.estado === '0' ? 'false' : 'true';
+
       setFormData({
         nombre: proveedor.nombre || '',
         telefono: proveedor.telefono || '',
         contacto: proveedor.contacto || '',
         direccion: proveedor.direccion || '',
+        estado: esActivo,
       });
     } else {
       setFormData({
@@ -23,6 +27,7 @@ function FormularioProveedor({ proveedor, onGuardar, onCancelar }) {
         telefono: '',
         contacto: '',
         direccion: '',
+        estado: 'true',
       });
     }
   }, [proveedor]);
@@ -37,7 +42,10 @@ function FormularioProveedor({ proveedor, onGuardar, onCancelar }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onGuardar(formData);
+    onGuardar({
+      ...formData,
+      estado: formData.estado === 'true',
+    });
   };
 
   return (
@@ -88,6 +96,19 @@ function FormularioProveedor({ proveedor, onGuardar, onCancelar }) {
           value={formData.direccion}
           onChange={handleChange}
         />
+      </div>
+
+      <div className="campo">
+        <label htmlFor="estado">Estado</label>
+        <select
+          id="estado"
+          name="estado"
+          value={formData.estado}
+          onChange={handleChange}
+        >
+          <option value="true">Activo</option>
+          <option value="false">Inactivo</option>
+        </select>
       </div>
 
       <div className="formulario__acciones">

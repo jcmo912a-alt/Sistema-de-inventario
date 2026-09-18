@@ -3,6 +3,7 @@ import Login from './components/Login';
 import Registro from './components/Registro';
 import Dashboard from './components/dashboard';
 import DashboardLayout from './components/layout/DashboardLayout';
+import Usuarios from './components/Usuarios/UsuariosPage';
 
 function PrivateRoute({ children }) {
   const usuarioGuardado = localStorage.getItem('usuario');

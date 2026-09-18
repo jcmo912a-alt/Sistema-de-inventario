@@ -5,7 +5,7 @@ import './Login.css';
 export default function Login() {
     const [formData, setFormData] = useState({
         correo: '',
-        contraseña: ''
+        contrasena: ''
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ export default function Login() {
         e.preventDefault();
         setError('');
 
-        if (!formData.correo || !formData.contraseña) {
+        if (!formData.correo || !formData.contrasena) {
             setError('Por favor ingresa correo y contraseña.');
             return;
         }
@@ -28,29 +28,26 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8080/api/usuarios/login', {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
 
             if (!response.ok) {
-                const mensajeError = await response.text();
-                throw new Error(mensajeError || 'Credenciales inválidas.');
+                const errorBody = await response.text();
+                throw new Error(errorBody || 'Credenciales inválidas.');
             }
 
-            // Leemos primero como texto plano para evitar que falle si no viene un JSON
-            const respuestaTexto = await response.text();
-            let usuarioGuardar = { correo: formData.correo };
+            const data = await response.json();
+            const token = data?.token;
 
-            try {
-                usuarioGuardar = JSON.parse(respuestaTexto);
-            } catch {
-                // Si no es un JSON válido, guardamos los datos del formulario directamente
-                usuarioGuardar = { correo: formData.correo };
+            if (!token) {
+                throw new Error('No se recibió un token válido del servidor.');
             }
 
-            localStorage.setItem('usuario', JSON.stringify(usuarioGuardar));
+            localStorage.setItem('token', token);
+            localStorage.setItem('usuario', JSON.stringify({ correo: formData.correo }));
             navigate('/dashboard');
 
         } catch (err) {
@@ -86,13 +83,13 @@ export default function Login() {
                     </div>
 
                     <div className="input-group">
-                        <label htmlFor="contraseña">Contraseña</label>
+                        <label htmlFor="contrasena">Contraseña</label>
                         <input
-                            id="contraseña"
+                            id="contrasena"
                             type="password"
-                            name="contraseña"
+                            name="contrasena"
                             placeholder="••••••••"
-                            value={formData.contraseña}
+                            value={formData.contrasena}
                             onChange={handleChange}
                             className="input-field"
                             disabled={loading}
