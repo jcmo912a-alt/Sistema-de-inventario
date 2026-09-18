@@ -1,5 +1,7 @@
 package com.inventario.sistema.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,17 +19,18 @@ public class Usuario {
     @Column(name = "CORREO", nullable = false, unique = true, length = 150)
     private String correo;
 
-    @Column(name = "CONTRASEÑA", nullable = false, length = 260)
-    private String contraseña;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "CONTRASENA") // o el nombre que tengas
+    private String contrasena;
 
     // Constructors
     public Usuario() {
     }
 
-    public Usuario(String nombre, String correo, String contraseña) {
+    public Usuario(String nombre, String correo, String contrasena) {
         this.nombre = nombre;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
     }
 
     // Getters y Setters
@@ -55,11 +58,11 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getcontrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setcontrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 }

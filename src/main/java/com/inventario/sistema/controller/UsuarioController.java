@@ -2,66 +2,67 @@ package com.inventario.sistema.controller;
 
 import com.inventario.sistema.entity.Usuario;
 import com.inventario.sistema.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador REST del módulo Usuario: CRUD en /api/usuarios.
+ * Todos los endpoints exigen token JWT (lo valida JwtFilter).
+ */
 @RestController
 @RequestMapping("/api/usuarios")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-    @PostMapping("/registro")
-    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
-        try {
-            Usuario nuevoUsuario = usuarioService.registrarUsuario(usuario);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            Usuario usuario = usuarioService.autenticarUsuario(loginRequest.getCorreo(), loginRequest.getContraseña());
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("id", usuario.getId());
-            response.put("nombre", usuario.getNombre());
-            response.put("correo", usuario.getCorreo());
-
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+    /** GET /api/usuarios: lista todos los usuarios. */
+    @GetMapping
+    public List<Usuario> listar() {
+        return usuarioService.listar();
     }
 
-    public static class LoginRequest {
-        private String correo;
-        private String contraseña;
+    /** GET /api/usuarios/{id}: consulta un usuario por ID (404 si no existe). */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+        return usuarioService.buscarPorId(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("mensaje", "Usuario no encontrado con id " + id)));
+    }
 
-        public String getCorreo() {
-            return correo;
-        }
+    /** POST /api/usuarios: registra un usuario (201 Created). */
+    @PostMapping
+    public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuario));
+    }
 
-        public void setCorreo(String correo) {
-            this.correo = correo;
+    /** PUT /api/usuarios/{id}: actualiza un usuario (404 si no existe). */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Usuario datos) {
+        if (usuarioService.buscarPorId(id).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("mensaje", "Usuario no encontrado con id " + id));
         }
+        return ResponseEntity.ok(usuarioService.actualizar(id, datos));
+    }
 
-        public String getContraseña() {
-            return contraseña;
+    /** DELETE /api/usuarios/{id}: elimina un usuario (204 No Content). */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        if (usuarioService.buscarPorId(id).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("mensaje", "Usuario no encontrado con id " + id));
         }
-
-        public void setContraseña(String contraseña) {
-            this.contraseña = contraseña;
-        }
+        usuarioService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }
