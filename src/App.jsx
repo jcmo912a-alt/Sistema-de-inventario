@@ -18,16 +18,21 @@ function App() {
         <Route path="/registro" element={<Registro />} />
 
         {/* Reemplaza la ruta del dashboard por esta para usar la vista directa */}
-        <Route
-          path="/dashboard"
+        <Route path="/dashboard"
           element={
             <PrivateRoute>
               <Dashboard />
             </PrivateRoute>
           }
         />
-
-
+        <Route
+          path="/usuarios"
+          element={
+            <PrivateRoute>
+              <Usuarios />
+            </PrivateRoute>
+          }
+        />
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

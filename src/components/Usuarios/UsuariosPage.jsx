@@ -64,7 +64,7 @@ const Usuarios = () => {
             id: usuario.idUsuarios || usuario.id,
             nombre: usuario.nombre,
             correo: usuario.correo,
-            contrasena: '' // Por seguridad se deja vacía al editar
+            contrasena: ''
         });
     };
 
@@ -89,52 +89,7 @@ const Usuarios = () => {
         <div style={{ padding: '20px' }}>
             <h2>Gestión de Usuarios</h2>
 
-            {/* Formulario de registro/edición */}
-            <form onSubmit={handleSubmit} style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '15px', borderRadius: '5px' }}>
-                <h3>{isEditing ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}</h3>
-                <div style={{ marginBottom: '10px' }}>
-                    <label>Nombre: </label>
-                    <input
-                        type="text"
-                        name="nombre"
-                        value={formData.nombre}
-                        onChange={handleInputChange}
-                        required
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <label>Correo: </label>
-                    <input
-                        type="email"
-                        name="correo"
-                        value={formData.correo}
-                        onChange={handleInputChange}
-                        required
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <label>Contraseña: </label>
-                    <input
-                        type="password"
-                        name="contrasena"
-                        value={formData.contrasena}
-                        onChange={handleInputChange}
-                        required={!isEditing} // Requerida solo al crear
-                        placeholder={isEditing ? 'Dejar en blanco si no se desea cambiar' : ''}
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                <button type="submit" style={{ padding: '8px 15px', cursor: 'pointer' }}>
-                    {isEditing ? 'Actualizar' : 'Guardar'}
-                </button>
-                {isEditing && (
-                    <button type="button" onClick={resetForm} style={{ marginLeft: '10px', padding: '8px 15px' }}>
-                        Cancelar
-                    </button>
-                )}
-            </form>
+
 
             {/* Estado de carga y errores */}
             {loading && <p>Cargando usuarios...</p>}
