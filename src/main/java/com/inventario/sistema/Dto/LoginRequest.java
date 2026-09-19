@@ -1,4 +1,4 @@
-package com.inventario.sistema.Dto;
+package com.inventario.sistema.dto;
 
 /**
  * DTO que recibe las credenciales enviadas en el login.

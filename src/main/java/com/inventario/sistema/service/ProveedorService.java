@@ -18,9 +18,10 @@ public class ProveedorService {
         this.proveedorRepository = proveedorRepository;
     }
 
-    // Listar todos los proveedores registrados
+    // Listar todos los proveedores registrados, incluso inactivos,
+    // para que el filtro del frontend pueda mostrarlos sin perder el estado real.
     public List<Proveedor> listarTodos() {
-        return proveedorRepository.findAll();
+        return proveedorRepository.findAllByOrderByIdProveedorAsc();
     }
 
     // Buscar un proveedor por id; si no se encuentra, lanza una excepción

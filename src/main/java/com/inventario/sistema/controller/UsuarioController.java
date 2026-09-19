@@ -32,7 +32,7 @@ public class UsuarioController {
 
     /** GET /api/usuarios/{id}: consulta un usuario por ID (404 si no existe). */
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
         return usuarioService.buscarPorId(id)
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -47,7 +47,7 @@ public class UsuarioController {
 
     /** PUT /api/usuarios/{id}: actualiza un usuario (404 si no existe). */
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Usuario datos) {
+    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody Usuario datos) {
         if (usuarioService.buscarPorId(id).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("mensaje", "Usuario no encontrado con id " + id));
@@ -57,7 +57,7 @@ public class UsuarioController {
 
     /** DELETE /api/usuarios/{id}: elimina un usuario (204 No Content). */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
         if (usuarioService.buscarPorId(id).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("mensaje", "Usuario no encontrado con id " + id));

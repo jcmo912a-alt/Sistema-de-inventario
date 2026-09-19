@@ -1,6 +1,6 @@
 package com.inventario.sistema.controller;
 
-import com.inventario.sistema.Dto.LoginRequest;
+import com.inventario.sistema.dto.LoginRequest;
 import com.inventario.sistema.entity.Usuario;
 import com.inventario.sistema.repository.UsuarioRepository;
 import com.inventario.sistema.security.JwtUtil;
@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.inventario.sistema.service.UsuarioService;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +17,7 @@ import java.util.Optional;
 /**
  * Controlador de autenticación: POST /api/auth/login
  */
+
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -22,18 +25,20 @@ public class AuthController {
 
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtil;
+    private final UsuarioService usuarioService;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public AuthController(UsuarioRepository usuarioRepository, JwtUtil jwtUtil) {
+    public AuthController(UsuarioRepository usuarioRepository, JwtUtil jwtUtil,
+            UsuarioService usuarioService) {
         this.usuarioRepository = usuarioRepository;
         this.jwtUtil = jwtUtil;
+        this.usuarioService = usuarioService;
     }
 
     /**
      * Valida correo y contraseña.
-     * Correcto -> 200 con mensaje y token JWT.
-     * Incorrecto -> 401 con mensaje de autenticación fallida.
      */
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
@@ -60,5 +65,31 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("mensaje", "Error en la autenticación: correo o contraseña incorrectos"));
+    }
+
+    /**
+     * POST /api/auth/registro: crea una cuenta nueva (endpoint público).
+     */
+    @PostMapping("/registro")
+    public ResponseEntity<?> registro(@RequestBody Usuario usuario) {
+
+        // Validación de campos obligatorios
+        if (usuario.getNombre() == null || usuario.getNombre().isBlank()
+                || usuario.getCorreo() == null || usuario.getCorreo().isBlank()
+                || usuario.getcontrasena() == null || usuario.getcontrasena().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("mensaje", "Nombre, correo y contraseña son obligatorios"));
+        }
+
+        try {
+            // El servicio valida el correo duplicado y encripta la contraseña
+            usuarioService.guardar(usuario);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(Map.of("mensaje", e.getReason()));
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("mensaje", "Cuenta creada correctamente"));
     }
 }

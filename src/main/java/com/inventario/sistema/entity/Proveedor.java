@@ -1,19 +1,15 @@
 package com.inventario.sistema.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "PROVEEDOR")
 @SQLDelete(sql = "UPDATE PROVEEDOR SET ESTADO = false WHERE ID_PROVEEDOR = ?")
-@SQLRestriction("ESTADO = true")
 public class Proveedor {
 
     @Id
@@ -41,8 +37,6 @@ public class Proveedor {
     @Column(name = "DIRECCION", length = 150)
     private String direccion;
 
-    // Evita que el campo booleano bruto se muestre en el JSON
-
     @Column(name = "ESTADO", nullable = false)
     private Boolean estado = true;
 
@@ -57,14 +51,6 @@ public class Proveedor {
         this.contacto = contacto;
         this.direccion = direccion;
         this.estado = (estado != null) ? estado : true;
-    }
-
-    /**
-     * Traduce el estado booleano a texto descriptivo para la respuesta JSON.
-     */
-    @JsonProperty("estado")
-    public String getEstadoTexto() {
-        return (this.estado != null && this.estado) ? "activo" : "inactivo";
     }
 
     // ---------------- Getters y setters regulares ----------------
