@@ -21,11 +21,13 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-    // Solo filtra /api/usuarios; deja pasar el preflight de CORS (OPTIONS)
+    // Filtra /api/usuarios y /api/movimientos; deja pasar el preflight de CORS
+    // (OPTIONS)
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !request.getRequestURI().startsWith("/api/usuarios")
-                || "OPTIONS".equalsIgnoreCase(request.getMethod());
+        String uri = request.getRequestURI();
+        boolean protegida = uri.startsWith("/api/usuarios") || uri.startsWith("/api/movimientos");
+        return !protegida || "OPTIONS".equalsIgnoreCase(request.getMethod());
     }
 
     @Override

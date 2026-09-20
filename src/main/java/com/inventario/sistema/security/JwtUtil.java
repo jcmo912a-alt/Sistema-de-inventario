@@ -32,6 +32,12 @@ public class JwtUtil {
                 .compact();
     }
 
+    /** Devuelve el correo (subject) guardado dentro del token. */
+    public String extractUsername(String token) {
+        return Jwts.parser().verifyWith(clave).build()
+                .parseSignedClaims(token).getPayload().getSubject();
+    }
+
     /** Devuelve true si el token es válido y no ha vencido. */
     public boolean validarToken(String token) {
         try {
