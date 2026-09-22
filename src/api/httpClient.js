@@ -2,14 +2,23 @@ import { API_BASE_URL } from '../config.js';
 
 /**
  * Realiza una petición HTTP hacia el backend y normaliza la respuesta.
- * Centraliza el armado de la URL, el envío de JSON y el manejo de errores
- * para que los servicios (proveedorService, productoService, categoriaService) no repitan
- * esta misma lógica en cada operación GET/POST/PUT/DELETE.
+ * Centraliza el armado de la URL, el envío de JSON, la autenticación JWT
+ * y el manejo de errores.
  */
 async function request(path, options = {}) {
+  // 1. Obtener el token JWT guardado en localStorage
+  const token = localStorage.getItem('token');
+
+  // 2. Preparar los encabezados incluyendo el Bearer Token si existe
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token && { 'Authorization': `Bearer ${token}` }),
+    ...options.headers,
+  };
+
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
     ...options,
+    headers,
   });
 
   // Un DELETE exitoso suele responder 204 No Content, sin cuerpo JSON.

@@ -21,7 +21,7 @@ const COLUMNAS = [
   {
     clave: 'descripcion',
     titulo: 'Descripción',
-    render: (fila) => fila?.descripcion || '—',
+    render: (fila) => fila?.categoria?.descripcion || '—',
   },
   {
     clave: 'proveedor',

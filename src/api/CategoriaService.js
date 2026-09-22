@@ -2,7 +2,7 @@ import { httpClient } from './httpClient.js';
 
 // Aísla la ruta /api/categorias del backend
 // para que los componentes de React no necesiten conocer la URL exacta.
-const RECURSO = '/categorias';
+const RECURSO = '/public/categorias';
 
 export const categoriaService = {
     listar: () => httpClient.get(RECURSO),
