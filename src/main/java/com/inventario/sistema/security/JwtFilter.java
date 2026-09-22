@@ -41,9 +41,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 && jwtUtil.validarToken(header.substring(7))) {
             chain.doFilter(request, response); // token válido: continúa
         } else {
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write("{\"mensaje\":\"Token ausente, inválido o vencido\"}");
+
         }
     }
 }

@@ -31,6 +31,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    // Maneja la excepción personalizada RecursoNoEncontradoException
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity<Map<String, Object>> handleNoEncontrado(RecursoNoEncontradoException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("estado", HttpStatus.NOT_FOUND.value());
+        response.put("mensaje", ex.getMessage());
+        response.put("timestamp", LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
     // Maneja las validaciones de las anotaciones @Valid (@Positive, @NotBlank,
     // etc.)
     @ExceptionHandler(MethodArgumentNotValidException.class)

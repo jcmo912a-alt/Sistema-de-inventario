@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 /**
  * Datos de un producto que se muestran en la API pública.
- * No incluye información del proveedor ni el stock exacto.
+ * este no incluye información del proveedor ni el stock exacto.
  */
 public record productoPublicoDto(
                 Integer idProducto,
