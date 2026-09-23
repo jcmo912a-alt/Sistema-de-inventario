@@ -47,9 +47,8 @@ export default function Login() {
             }
 
             localStorage.setItem('token', token);
-            localStorage.setItem('usuario', JSON.stringify({ correo: formData.correo }));
+            localStorage.setItem('usuario', JSON.stringify({ correo: formData.correo, rol: data.rol }));
             navigate('/dashboard');
-
         } catch (err) {
             setError(err.message);
         }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, Link } from 'react-router-dom';
 import '../Dashboard.css';
 
 export default function DashboardLayout({ children }) {
@@ -22,6 +22,8 @@ export default function DashboardLayout({ children }) {
     navigate('/login');
   };
 
+  const esAdmin = usuario?.rol === 'ADMIN';
+
   return (
     <div className="dashboard-container">
       {/* Sidebar Lateral */}
@@ -32,6 +34,9 @@ export default function DashboardLayout({ children }) {
           <a href="#productos" className="nav-item">Productos</a>
           <a href="#proveedores" className="nav-item">Proveedores</a>
           <a href="#categorias" className="nav-item">Categorías</a>
+          {esAdmin && (
+            <Link to="/usuarios" className="nav-item">Usuarios</Link>
+          )}
         </nav>
         <button onClick={handleCerrarSesion} className="btn-logout">
           Cerrar Sesión

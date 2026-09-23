@@ -10,6 +10,9 @@ export default function Dashboard() {
     const [moduloActivo, setModuloActivo] = useState('inicio');
     const navigate = useNavigate();
 
+    const usuarioActual = JSON.parse(localStorage.getItem('usuario') || '{}');
+    const esAdmin = usuarioActual?.rol === 'ADMIN';
+
     const handleCerrarSesion = () => {
         localStorage.removeItem('usuario');
         localStorage.removeItem('token');
@@ -53,6 +56,7 @@ export default function Dashboard() {
                     >
                         Productos
                     </a>
+
                     <a
                         href="#movimientos"
                         onClick={(e) => { e.preventDefault(); setModuloActivo('movimientos'); }}
@@ -63,6 +67,7 @@ export default function Dashboard() {
                     >
                         Movimientos
                     </a>
+
                     <a
                         href="#proveedores"
                         onClick={(e) => { e.preventDefault(); setModuloActivo('proveedores'); }}
@@ -73,16 +78,20 @@ export default function Dashboard() {
                     >
                         Proveedores
                     </a>
-                    <a
-                        href="#Usuarios"
-                        onClick={(e) => { e.preventDefault(); setModuloActivo('usuarios'); }}
-                        style={{
-                            color: moduloActivo === 'usuarios' ? '#38bdf8' : '#94a3b8',
-                            textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500
-                        }}
-                    >
-                        Usuarios
-                    </a>
+
+                    {esAdmin && (
+                        <a
+                            href="#usuarios"
+                            onClick={(e) => { e.preventDefault(); setModuloActivo('usuarios'); }}
+                            style={{
+                                color: moduloActivo === 'usuarios' ? '#38bdf8' : '#94a3b8',
+                                textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500
+                            }}
+                        >
+                            Usuarios
+                        </a>
+                    )}
+
                     <button
                         onClick={handleCerrarSesion}
                         style={{
@@ -94,140 +103,152 @@ export default function Dashboard() {
                         ➔ Salir
                     </button>
                 </nav>
-            </header>
+            </header >
 
             {/* VISTA INICIO */}
-            {moduloActivo === 'inicio' && (
-                <>
-                    <section style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
-                        <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
-                            <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Total de productos</span>
-                            <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>2</h2>
-                        </div>
-                        <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
-                            <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Productos disponibles</span>
-                            <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>1</h2>
-                        </div>
-                        <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
-                            <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Bajo en stock</span>
-                            <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>1</h2>
-                        </div>
-                        <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
-                            <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Proveedores</span>
-                            <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>2</h2>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.25rem' }}>Menú principal</h2>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
-                            {/* Card Productos */}
-                            <div
-                                onClick={() => setModuloActivo('productos')}
-                                style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
-                            >
-                                <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#2563eb', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📦</div>
-                                <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Productos</h3>
-                                <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Gestiona tu catálogo de productos</p>
+            {
+                moduloActivo === 'inicio' && (
+                    <>
+                        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
+                            <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
+                                <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Total de productos</span>
+                                <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>2</h2>
                             </div>
-
-                            {/* Card Movimientos */}
-                            <div
-                                onClick={() => setModuloActivo('movimientos')}
-                                style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
-                            >
-                                <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#10b981', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🔄</div>
-                                <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Movimientos</h3>
-                                <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Gestiona entradas y salidas</p>
+                            <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
+                                <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Productos disponibles</span>
+                                <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>1</h2>
                             </div>
-
-                            {/* Card Usuarios */}
-                            <div
-                                onClick={() => setModuloActivo('usuarios')}
-                                style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
-                            >
-                                <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#7c3aed', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👤</div>
-                                <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Usuarios</h3>
-                                <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Administra los usuarios del sistema</p>
+                            <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
+                                <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Bajo en stock</span>
+                                <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>1</h2>
                             </div>
-
-                            {/* Card Proveedores */}
-                            <div
-                                onClick={() => setModuloActivo('proveedores')}
-                                style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
-                            >
-                                <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#ea580c', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👥</div>
-                                <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Proveedores</h3>
-                                <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Administra tus proveedores</p>
+                            <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
+                                <span style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'block', marginBottom: '0.5rem' }}>Proveedores</span>
+                                <h2 style={{ fontSize: '1.75rem', margin: 0, fontWeight: 700 }}>2</h2>
                             </div>
-                        </div>
-                    </section>
-                </>
-            )}
+                        </section>
+
+                        <section>
+                            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.25rem' }}>Menú principal</h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+                                {/* Card Productos */}
+                                <div
+                                    onClick={() => setModuloActivo('productos')}
+                                    style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
+                                >
+                                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#2563eb', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📦</div>
+                                    <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Productos</h3>
+                                    <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Gestiona tu catálogo de productos</p>
+                                </div>
+
+                                {/* Card Movimientos */}
+                                <div
+                                    onClick={() => setModuloActivo('movimientos')}
+                                    style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
+                                >
+                                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#10b981', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🔄</div>
+                                    <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Movimientos</h3>
+                                    <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Gestiona entradas y salidas</p>
+                                </div>
+
+                                {/* Card Usuarios */}
+                                {esAdmin && (
+                                    <div
+                                        onClick={() => setModuloActivo('usuarios')}
+                                        style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
+                                    >
+                                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#7c3aed', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👤</div>
+                                        <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Usuarios</h3>
+                                        <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Administra los usuarios del sistema</p>
+                                    </div>
+                                )}
+
+                                {/* Card Proveedores */}
+                                <div
+                                    onClick={() => setModuloActivo('proveedores')}
+                                    style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem 1.25rem', textAlign: 'center', cursor: 'pointer' }}
+                                >
+                                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#ea580c', margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👥</div>
+                                    <h3 style={{ fontSize: '1rem', margin: '0 0 0.4rem 0' }}>Proveedores</h3>
+                                    <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: 0 }}>Administra tus proveedores</p>
+                                </div>
+                            </div>
+                        </section>
+                    </>
+                )
+            }
 
             {/* VISTA PRODUCTOS */}
-            {moduloActivo === 'productos' && (
-                <div>
-                    <button
-                        onClick={() => setModuloActivo('inicio')}
-                        style={{
-                            backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
-                            padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
-                        }}
-                    >
-                        ← Volver al Menú
-                    </button>
-                    <ProductosPage />
-                </div>
-            )}
+            {
+                moduloActivo === 'productos' && (
+                    <div>
+                        <button
+                            onClick={() => setModuloActivo('inicio')}
+                            style={{
+                                backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
+                                padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
+                            }}
+                        >
+                            ← Volver al Menú
+                        </button>
+                        <ProductosPage />
+                    </div>
+                )
+            }
 
             {/* VISTA MOVIMIENTOS */}
-            {moduloActivo === 'movimientos' && (
-                <div>
-                    <button
-                        onClick={() => setModuloActivo('inicio')}
-                        style={{
-                            backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
-                            padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
-                        }}
-                    >
-                        ← Volver al Menú
-                    </button>
-                    <MovimientosPage />
-                </div>
-            )}
+            {
+                moduloActivo === 'movimientos' && (
+                    <div>
+                        <button
+                            onClick={() => setModuloActivo('inicio')}
+                            style={{
+                                backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
+                                padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
+                            }}
+                        >
+                            ← Volver al Menú
+                        </button>
+                        <MovimientosPage />
+                    </div>
+                )
+            }
 
             {/* VISTA PROVEEDORES */}
-            {moduloActivo === 'proveedores' && (
-                <div>
-                    <button
-                        onClick={() => setModuloActivo('inicio')}
-                        style={{
-                            backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
-                            padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
-                        }}
-                    >
-                        ← Volver al Menú
-                    </button>
-                    <ProveedoresPage />
-                </div>
-            )}
+            {
+                moduloActivo === 'proveedores' && (
+                    <div>
+                        <button
+                            onClick={() => setModuloActivo('inicio')}
+                            style={{
+                                backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
+                                padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
+                            }}
+                        >
+                            ← Volver al Menú
+                        </button>
+                        <ProveedoresPage />
+                    </div>
+                )
+            }
 
             {/* VISTA USUARIOS */}
-            {moduloActivo === 'usuarios' && (
-                <div>
-                    <button
-                        onClick={() => setModuloActivo('inicio')}
-                        style={{
-                            backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
-                            padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
-                        }}
-                    >
-                        ← Volver al Menú
-                    </button>
-                    <UsuariosPage />
-                </div>
-            )}
+            {
+                moduloActivo === 'usuarios' && esAdmin && (
+                    <div>
+                        <button
+                            onClick={() => setModuloActivo('inicio')}
+                            style={{
+                                backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff',
+                                padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', marginBottom: '1.5rem'
+                            }}
+                        >
+                            ← Volver al Menú
+                        </button>
+                        <UsuariosPage />
+                    </div>
+                )
+            }
 
             {/* Toast Inferior */}
             <div style={{
@@ -238,6 +259,6 @@ export default function Dashboard() {
                 <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></span>
                 Sesión iniciada correctamente
             </div>
-        </div>
+        </div >
     );
 }
