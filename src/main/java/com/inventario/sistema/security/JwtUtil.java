@@ -22,14 +22,21 @@ public class JwtUtil {
     // Tiempo de vida del token: 1 hora
     private static final long EXPIRACION_MS = 1000 * 60 * 60;
 
-    /** Genera un token JWT para el correo indicado. */
-    public String generarToken(String correo) {
+    /** Genera un token JWT para el correo indicado, incluyendo el rol. */
+    public String generarToken(String correo, String rol) {
         return Jwts.builder()
                 .subject(correo)
+                .claim("rol", rol)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRACION_MS))
                 .signWith(clave)
                 .compact();
+    }
+
+    /** Devuelve el rol guardado dentro del token. */
+    public String extractRol(String token) {
+        return Jwts.parser().verifyWith(clave).build()
+                .parseSignedClaims(token).getPayload().get("rol", String.class);
     }
 
     /** Devuelve el correo (subject) guardado dentro del token. */

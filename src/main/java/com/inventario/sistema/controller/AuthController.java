@@ -56,15 +56,16 @@ public class AuthController {
         if (usuario.isPresent()
                 && encoder.matches(request.getContrasena(), usuario.get().getcontrasena())) {
 
-            String token = jwtUtil.generarToken(usuario.get().getCorreo());
+            String token = jwtUtil.generarToken(usuario.get().getCorreo(), usuario.get().getRol());
             return ResponseEntity.ok(Map.of(
                     "mensaje", "Autenticación satisfactoria",
                     "token", token,
-                    "tipo", "Bearer"));
+                    "tipo", "Bearer",
+                    "rol", usuario.get().getRol()));
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("mensaje", "Error en la autenticación: correo o contraseña incorrectos"));
+                .body(Map.of("mensaje", "Credenciales inválidas"));
     }
 
     /**

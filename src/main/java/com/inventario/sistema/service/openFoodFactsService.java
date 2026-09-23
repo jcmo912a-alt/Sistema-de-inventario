@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
  * Servicio que consume la API pública externa Open Food Facts para consultar
  * información de un producto alimenticio a partir de su código de barras.
  *
- * Flujo: Controller -> este servicio -> Open Food Facts -> DTO propio.
+ * 
  *
  * Errores controlados:
  * - 400: el código de barras no tiene un formato válido.

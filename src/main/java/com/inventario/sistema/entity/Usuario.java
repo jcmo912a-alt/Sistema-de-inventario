@@ -13,6 +13,9 @@ public class Usuario {
     @Column(name = "ID_USUARIOS")
     private Integer id;
 
+    @Column(name = "ROL", nullable = false, length = 20)
+    private String rol = "USUARIO";
+
     @Column(name = "NOMBRE", nullable = false, length = 100)
     private String nombre;
 
@@ -60,6 +63,14 @@ public class Usuario {
 
     public String getcontrasena() {
         return contrasena;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     public void setcontrasena(String contrasena) {

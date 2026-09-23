@@ -3,7 +3,7 @@ package com.inventario.sistema.controller;
 import com.inventario.sistema.dto.productoPublicoDto;
 import com.inventario.sistema.entity.Categoria;
 import com.inventario.sistema.entity.Producto;
-import com.inventario.sistema.repository.categoriaRepository;
+import com.inventario.sistema.repository.CategoriaRepository;
 import com.inventario.sistema.repository.ProductoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,10 @@ import java.util.Map;
 public class publicApiController {
 
     private final ProductoRepository productoRepository;
-    private final categoriaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
 
     public publicApiController(ProductoRepository productoRepository,
-            categoriaRepository categoriaRepository) {
+            CategoriaRepository categoriaRepository) {
         this.productoRepository = productoRepository;
         this.categoriaRepository = categoriaRepository;
     }
