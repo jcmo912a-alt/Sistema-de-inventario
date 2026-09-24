@@ -36,7 +36,7 @@ public class AuthController {
     }
 
     /**
-     * Valida correo y contraseña.
+     * Valida correo, contraseña y que el usuario esté activo.
      */
 
     @PostMapping("/login")
@@ -52,8 +52,9 @@ public class AuthController {
         // Busca el usuario por correo
         Optional<Usuario> usuario = usuarioRepository.findByCorreo(request.getCorreo());
 
-        // Compara la contraseña enviada con el hash BCrypt guardado en la BD
+        // Usuario existente y ACTIVO, con contraseña que coincide con el hash BCrypt
         if (usuario.isPresent()
+                && Boolean.TRUE.equals(usuario.get().getActivo())
                 && encoder.matches(request.getContrasena(), usuario.get().getcontrasena())) {
 
             String token = jwtUtil.generarToken(usuario.get().getCorreo(), usuario.get().getRol());
@@ -64,12 +65,14 @@ public class AuthController {
                     "rol", usuario.get().getRol()));
         }
 
+        // Mismo mensaje para credenciales malas, cuenta inexistente o inactiva
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("mensaje", "Credenciales inválidas"));
     }
 
     /**
      * POST /api/auth/registro: crea una cuenta nueva (endpoint público).
+     * Siempre se crea con rol USUARIO y activa; el cliente no puede elegir el rol.
      */
     @PostMapping("/registro")
     public ResponseEntity<?> registro(@RequestBody Usuario usuario) {
@@ -81,6 +84,11 @@ public class AuthController {
             return ResponseEntity.badRequest()
                     .body(Map.of("mensaje", "Nombre, correo y contraseña son obligatorios"));
         }
+
+        // El servidor decide estos datos, no el cliente
+        usuario.setId(null);
+        usuario.setRol("USUARIO");
+        usuario.setActivo(true);
 
         try {
             // El servicio valida el correo duplicado y encripta la contraseña

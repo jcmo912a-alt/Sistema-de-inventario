@@ -10,7 +10,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * Filtro que exige un token JWT válido en los endpoints /api/usuarios/**.
+ * Filtro JWT: exige token válido en los endpoints protegidos y aplica
+ * permisos por rol en el servidor (ADMIN / USUARIO).
+ *
+ * Reglas:
+ * - /api/usuarios/** -> solo ADMIN
+ * - /api/proveedores/** -> lectura (GET) cualquier rol; POST/PUT/DELETE solo
+ * ADMIN
+ * - /api/productos/** -> cualquier rol autenticado; DELETE solo ADMIN
+ * - /api/movimientos/** -> cualquier rol autenticado
+ * - /api/dashboard/** -> cualquier rol autenticado (el contenido cambia según
+ * el rol)
  */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -21,15 +31,14 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-    // Filtra /api/usuarios, /api/movimientos, /api/productos y /api/proveedores;
-    // deja pasar el preflight de CORS (OPTIONS)
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String uri = request.getRequestURI();
         boolean protegida = uri.startsWith("/api/usuarios")
                 || uri.startsWith("/api/movimientos")
                 || uri.startsWith("/api/productos")
-                || uri.startsWith("/api/proveedores");
+                || uri.startsWith("/api/proveedores")
+                || uri.startsWith("/api/dashboard");
         return !protegida || "OPTIONS".equalsIgnoreCase(request.getMethod());
     }
 
@@ -39,31 +48,53 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain chain) throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
-        String uri = request.getRequestURI();
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
             if (jwtUtil.validarToken(token)) {
-                // Rutas exclusivas de ADMIN (ajusta según lo que definas)
-                boolean requiereAdmin = uri.startsWith("/api/usuarios");
+                String rol = jwtUtil.extractRol(token);
+                request.setAttribute("rol", rol);
+                request.setAttribute("correo", jwtUtil.extractUsername(token));
 
-                if (requiereAdmin && !"ADMIN".equals(jwtUtil.extractRol(token))) {
-                    response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    response.setContentType("application/json;charset=UTF-8");
-                    response.getWriter().write("{\"mensaje\":\"No tiene permisos suficientes\"}");
+                if (requiereAdmin(request) && !"ADMIN".equals(rol)) {
+                    responder(response, HttpServletResponse.SC_FORBIDDEN,
+                            "No tiene permisos suficientes");
                     return;
                 }
 
-                chain.doFilter(request, response); // token válido y con permisos: continúa
+                // El controlador podrá leer el rol sin volver a procesar el token
+                chain.doFilter(request, response);
                 return;
             }
         }
 
+        responder(response, HttpServletResponse.SC_UNAUTHORIZED,
+                "Token ausente, inválido o vencido");
+    }
+
+    private boolean requiereAdmin(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String metodo = request.getMethod();
+        boolean soloLectura = "GET".equalsIgnoreCase(metodo);
+
+        if (uri.startsWith("/api/usuarios")) {
+            return true;
+        }
+        if (uri.startsWith("/api/proveedores")) {
+            return !soloLectura;
+        }
+        if (uri.startsWith("/api/productos")) {
+            return "DELETE".equalsIgnoreCase(metodo);
+        }
+        return false;
+    }
+
+    private void responder(HttpServletResponse response, int estado, String mensaje)
+            throws IOException {
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(estado);
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write("{\"mensaje\":\"Token ausente, inválido o vencido\"}");
+        response.getWriter().write("{\"mensaje\":\"" + mensaje + "\"}");
     }
 }

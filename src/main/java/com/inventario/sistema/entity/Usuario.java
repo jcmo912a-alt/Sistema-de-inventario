@@ -26,6 +26,9 @@ public class Usuario {
     @Column(name = "CONTRASENA") // o el nombre que tengas
     private String contrasena;
 
+    @Column(name = "ACTIVO", nullable = false)
+    private Boolean activo = true;
+
     // Constructors
     public Usuario() {
     }
@@ -75,5 +78,13 @@ public class Usuario {
 
     public void setcontrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }

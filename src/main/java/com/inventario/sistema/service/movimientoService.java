@@ -53,6 +53,12 @@ public class movimientoService {
                         "No se encontró el movimiento con id " + id));
     }
 
+    /** Movimientos registrados por un usuario (alcance del rol USUARIO). */
+    @Transactional(readOnly = true)
+    public List<movimientos> listarPorUsuario(Integer idUsuario) {
+        return movimientosRepository.findByUsuarioIdOrderByFechaDescIdMovimientoDesc(idUsuario);
+    }
+
     /**
      * Registra un movimiento y actualiza el stock del producto:
      * ENTRADA suma la cantidad; SALIDA la resta y se rechaza (409) si supera el
@@ -62,6 +68,7 @@ public class movimientoService {
     public movimientos registrar(movimientos movimiento, Usuario usuario) {
         if (movimiento.getProducto() == null || movimiento.getProducto().getIdProducto() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El producto es obligatorio");
+
         }
 
         Integer idProducto = movimiento.getProducto().getIdProducto();
@@ -90,5 +97,6 @@ public class movimientoService {
         movimiento.setFecha(LocalDate.now());
 
         return movimientosRepository.save(movimiento);
+
     }
 }

@@ -18,4 +18,14 @@ public interface movimientosRepository extends JpaRepository<movimientos, Intege
 
     // Historial: primero los más recientes
     List<movimientos> findAllByOrderByFechaDescIdMovimientoDesc();
+
+    // ---- Alcance por usuario (rol USUARIO solo ve lo suyo) ----
+    List<movimientos> findByUsuarioIdOrderByFechaDescIdMovimientoDesc(Integer idUsuario);
+
+    // ---- Conteos para los indicadores del dashboard ----
+    long countByTipoMovimiento(String tipoMovimiento);
+
+    long countByUsuarioId(Integer idUsuario);
+
+    long countByUsuarioIdAndTipoMovimiento(Integer idUsuario, String tipoMovimiento);
 }
