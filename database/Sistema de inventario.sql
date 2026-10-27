@@ -1,22 +1,15 @@
--- MySQL Workbench Forward Engineering
+-- MySQL Workbench Forward Engineering Corregido
 SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS,
   UNIQUE_CHECKS = 0;
 SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS,
   FOREIGN_KEY_CHECKS = 0;
 SET @OLD_SQL_MODE = @@SQL_MODE,
   SQL_MODE = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8;
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8mb4;
 USE `mydb`;
 -- -----------------------------------------------------
 -- Table `mydb`.`PROVEEDOR`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`PROVEEDOR`;
 CREATE TABLE IF NOT EXISTS `mydb`.`PROVEEDOR` (
   `ID_PROVEEDOR` INT NOT NULL AUTO_INCREMENT,
   `NOMBRE` VARCHAR(100) NOT NULL,
@@ -29,7 +22,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`PROVEEDOR` (
 -- -----------------------------------------------------
 -- Table `mydb`.`CATEGORIA`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`CATEGORIA`;
 CREATE TABLE IF NOT EXISTS `mydb`.`CATEGORIA` (
   `ID_CATEGORIA` INT NOT NULL AUTO_INCREMENT,
   `NOMBRE` VARCHAR(100) NOT NULL,
@@ -39,13 +31,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`CATEGORIA` (
 -- -----------------------------------------------------
 -- Table `mydb`.`PRODUCTO`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`PRODUCTO`;
 CREATE TABLE IF NOT EXISTS `mydb`.`PRODUCTO` (
   `ID_PRODUCTO` INT NOT NULL AUTO_INCREMENT,
   `NOMBRE` VARCHAR(100) NOT NULL,
   `ID_CATEGORIA` INT NULL,
   `ID_PROVEEDOR` INT NULL,
-  `STOCK` INT NOT NULL,
+  `STOCK` INT NOT NULL DEFAULT 0,
   `DESCRIPCION` VARCHAR(200) NULL,
   `PRECIO` DECIMAL(10, 2) NULL,
   PRIMARY KEY (`ID_PRODUCTO`),
@@ -57,25 +48,24 @@ CREATE TABLE IF NOT EXISTS `mydb`.`PRODUCTO` (
 -- -----------------------------------------------------
 -- Table `mydb`.`USUARIOS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`USUARIOS`;
 CREATE TABLE IF NOT EXISTS `mydb`.`USUARIOS` (
   `ID_USUARIOS` INT NOT NULL AUTO_INCREMENT,
   `NOMBRE` VARCHAR(100) NOT NULL,
   `CORREO` VARCHAR(150) NOT NULL,
   `CONTRASENA` VARCHAR(260) NOT NULL,
   `ROL` VARCHAR(20) NOT NULL DEFAULT 'USUARIO',
+  `ACTIVO` TINYINT(1) NOT NULL DEFAULT 1,
   UNIQUE INDEX `CORREO_UNIQUE` (`CORREO` ASC) VISIBLE,
   PRIMARY KEY (`ID_USUARIOS`)
 ) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`MOVIMIENTO`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`MOVIMIENTO`;
 CREATE TABLE IF NOT EXISTS `mydb`.`MOVIMIENTO` (
   `ID_MOVIMIENTO` INT NOT NULL AUTO_INCREMENT,
   `ID_PRODUCTO` INT NULL,
-  `TIPO DE MOVIMIENTO` VARCHAR(20) NULL,
-  `CAANTIDAD` INT NULL,
+  `TIPO_MOVIMIENTO` VARCHAR(20) NULL,
+  `CANTIDAD` INT NULL,
   `FECHA` DATE NULL,
   `ID_USUARIOS` INT NULL,
   PRIMARY KEY (`ID_MOVIMIENTO`),
@@ -87,7 +77,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`MOVIMIENTO` (
 -- -----------------------------------------------------
 -- Table `mydb`.`INVENTARIO`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`INVENTARIO`;
 CREATE TABLE IF NOT EXISTS `mydb`.`INVENTARIO` (
   `ID_INVENTARIO` INT NOT NULL AUTO_INCREMENT,
   `ID_PRODUCTO` INT NULL,
@@ -97,13 +86,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`INVENTARIO` (
   UNIQUE INDEX `ID_PRODUCTO_UNIQUE` (`ID_PRODUCTO` ASC) VISIBLE,
   CONSTRAINT `FKI_D_PRODUCTO` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `mydb`.`PRODUCTO` (`ID_PRODUCTO`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB;
-USE `mydb`;
--- -----------------------------------------------------
---  routine1
--- -----------------------------------------------------
-USE `mydb`;
-DROP PROCEDURE IF EXISTS `mydb`.`routine1`;
-DELIMITER $$ USE `mydb` $$$$ DELIMITER;
 SET SQL_MODE = @OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
