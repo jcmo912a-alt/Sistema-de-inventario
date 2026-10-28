@@ -3,6 +3,7 @@ package com.inventario.sistema.security;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -15,12 +16,18 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // Clave secreta de firma (mínimo 32 caracteres)
-    private final SecretKey clave = Keys.hmacShaKeyFor(
-            "clave-secreta-del-proyecto-inventario-2026".getBytes(StandardCharsets.UTF_8));
+    // Clave secreta de firma, leída de la variable de entorno JWT_SECRET (mínimo 32
+    // caracteres).
+    // El valor después de ":" solo se usa al correr en local, cuando la variable no
+    // existe.
+    private final SecretKey clave;
 
     // Tiempo de vida del token: 1 hora
     private static final long EXPIRACION_MS = 1000 * 60 * 60;
+
+    public JwtUtil(@Value("${JWT_SECRET:clave-solo-para-desarrollo-local-12345678}") String secreto) {
+        this.clave = Keys.hmacShaKeyFor(secreto.getBytes(StandardCharsets.UTF_8));
+    }
 
     /** Genera un token JWT para el correo indicado, incluyendo el rol. */
     public String generarToken(String correo, String rol) {
