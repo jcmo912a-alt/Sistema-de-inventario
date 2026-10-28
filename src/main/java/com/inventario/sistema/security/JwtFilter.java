@@ -92,7 +92,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private void responder(HttpServletResponse response, int estado, String mensaje)
             throws IOException {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
         response.setStatus(estado);
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write("{\"mensaje\":\"" + mensaje + "\"}");
