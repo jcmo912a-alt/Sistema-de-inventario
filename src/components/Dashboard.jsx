@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ProductosPage from './productos/ProductosPage';
 import ProveedoresPage from './proveedores/ProveedoresPage';
 import UsuariosPage from './Usuarios/UsuariosPage';
-import MovimientosPage from './movimientos/MovimientosPage';
+import MovimientosPage from './Movimientos/MovimientosPage.jsx';
 import { dashboardService } from '../api/DashboardService.js';
 
 // Indicadores que se muestran según el alcance que devuelve el backend
