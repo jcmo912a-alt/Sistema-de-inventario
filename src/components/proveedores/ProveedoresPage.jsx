@@ -57,6 +57,9 @@ function ProveedoresPage() {
   const [proveedorEnEdicion, setProveedorEnEdicion] = useState(null);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
 
+  const usuarioActual = JSON.parse(localStorage.getItem('usuario') || '{}');
+  const esAdmin = usuarioActual?.rol === 'ADMIN';
+
   // Carga inicial de proveedores (GET /api/proveedores) al montar el componente.
   useEffect(() => {
     cargarProveedores();
@@ -189,16 +192,20 @@ function ProveedoresPage() {
         filas={proveedoresFiltrados}
         cargando={cargando}
         mensajeVacio="Aún no hay proveedores registrados."
-        acciones={(proveedor) => (
-          <div className="tabla__acciones">
-            <Boton variante="secundario" onClick={() => abrirParaEditar(proveedor)}>
-              Editar
-            </Boton>
-            <Boton variante="peligro" onClick={() => eliminarProveedor(proveedor)}>
-              Eliminar
-            </Boton>
-          </div>
-        )}
+        acciones={
+          esAdmin
+            ? (proveedor) => (
+              <div className="tabla__acciones">
+                <Boton variante="secundario" onClick={() => abrirParaEditar(proveedor)}>
+                  Editar
+                </Boton>
+                <Boton variante="peligro" onClick={() => eliminarProveedor(proveedor)}>
+                  Eliminar
+                </Boton>
+              </div>
+            )
+            : undefined
+        }
       />
 
       <Modal
